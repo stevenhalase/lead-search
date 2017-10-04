@@ -49,14 +49,16 @@ function handleGeolocation(position) {
 
 function doYelpSearchCoords(searchTerm, lat, lng) {
   $.ajax({
-      url: 'http://localhost:8080/yelp?searchTerm=' + searchTerm + '&lat=' + lat + '&lng=' + lng,
+      // url: 'http://localhost:8080/yelp?searchTerm=' + searchTerm + '&lat=' + lat + '&lng=' + lng,
+      url: 'https://lead-source.herokuapp.com/yelp?searchTerm=' + searchTerm + '&lat=' + lat + '&lng=' + lng,
       success: handleYelpData,
   });
 }
 
 function doYelpSearchCityState(searchTerm, city, state) {
   $.ajax({
-      url: 'http://localhost:8080/yelp?searchTerm=' + searchTerm + '&location=' + city + ',' + state,
+      // url: 'http://localhost:8080/yelp?searchTerm=' + searchTerm + '&location=' + city + ',' + state,
+      url: 'https://lead-source.herokuapp.com/yelp?searchTerm=' + searchTerm + '&location=' + city + ',' + state,
       success: handleYelpData,
   });
 }
@@ -78,7 +80,8 @@ function handleYelpData(data) {
 
 function domainSearch(businessURL) {
     $.ajax({
-        url: 'http://localhost:8080/hunter?businessUrl=' + businessURL,
+        // url: 'http://localhost:8080/hunter?businessUrl=' + businessURL,
+        url: 'https://lead-source.herokuapp.com/hunter?businessUrl=' + businessURL,
         success: handleHunterData,
     });
 }
@@ -116,7 +119,8 @@ function addEmailResults(contacts) {
 
 function unifiedSearch(businessURL) {
   $.ajax({
-      url: 'http://localhost:8080/unified?businessUrl=' + businessURL,
+      // url: 'http://localhost:8080/unified?businessUrl=' + businessURL,
+      url: 'https://lead-source.herokuapp.com/unified?businessUrl=' + businessURL,
       success: handleUnifiedData,
   });
 }
