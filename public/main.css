@@ -8,7 +8,7 @@ body {
     margin-top: 30vh;
 }
 
-#searchHelp {
+.form-text.text-muted {
     color: #FFF!important;
 }
 
@@ -26,6 +26,7 @@ body {
     border: 1px solid #FFF;
     width: 50px;
     height: 50px;
+    vertical-align: middle;
 }
 
 .search-selection-button img {
@@ -39,15 +40,60 @@ body {
     box-shadow: 0px 0px 19px -2px rgba(0,0,0,0.75);
 }
 
-.results-container {
+.hunter-results-container {
     padding: 0 50px;
     border-radius: 3px;
     margin-top: 100px;
     margin-bottom: 100px;
+    display: none;
 }
 
-.results-container table {
+.hunter-results-container table {
     width: 90%!important;
     margin: 1rem auto!important;
     background: #FFF;
+}
+
+#cityStateGroup {
+  width: 50%;
+  display: none;
+}
+
+.yelp-results-container {
+  padding: 0 50px;
+  border-radius: 3px;
+  margin-top: 100px;
+  margin-bottom: 100px;
+  display: none;
+}
+
+.yelp-results-container #businessesTable {
+  width: 90%!important;
+  margin: 1rem auto!important;
+}
+
+#businessesTable {
+  padding: 20px;
+  background-color: #FFF;
+}
+
+.business-container {
+  padding: 20px 50px;
+  border-bottom: 1px solid #EEE;
+}
+
+.business-container img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+
+.business-container .row .col:nth-child(1) {
+  flex-grow: 0;
+}
+
+.business-container .row .col:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

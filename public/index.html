@@ -9,20 +9,9 @@
     </head>
     <body>
         <div class="container search-container">
-            <div class="row">
-                <div class="col">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for..." aria-label="Search for..." id="searchInput">
-                        <span class="input-group-btn">
-                            <button class="btn btn-secondary" type="button" id="searchBtn">Go!</button>
-                        </span>
-                    </div>
-                    <small id="searchHelp" class="form-text text-muted">Enter Business URL.</small>
-                </div>
-            </div>
             <div class="row search-selection-row">
                 <div class="col">
-                    <button class="search-selection-button search-is-selected" id="hunterSelection">
+                    <button class="search-selection-button search-is-selected" id="hunterSelection" data-search-type="hunter">
                         <svg class="orange" height="23" space="preserve" version="1.1" viewBox="0 0 116.24 116.24" width="23" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg">
                             <metadata id="metadata8">
                                 <rdf>
@@ -40,16 +29,32 @@
                             </g>
                         </svg>
                     </button>
-                </div>
-                <div class="col">
-                    <button class="search-selection-button" id="hunterSelection">
+                    <button class="search-selection-button" id="yelpSelection" data-search-type="yelp">
                         <img src="https://s3-media3.fl.yelpcdn.com/assets/srv0/styleguide/24e1fe240f00/assets/img/brand_guidelines/yelp_fullcolor_outline.png" />
                     </button>
                 </div>
             </div>
+            <div class="row">
+                <div class="col">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for..." aria-label="Search for..." id="searchInput">
+                        <span class="input-group-btn">
+                            <button class="btn btn-secondary" type="button" id="searchBtn">Go!</button>
+                        </span>
+                    </div>
+                    <small id="searchHelp" class="form-text text-muted">Enter Business URL.</small>
+                    <div id="cityStateGroup">
+                      <div class="input-group">
+                        <input type="text" class="form-control" placeholder="City.." aria-label="City..." id="cityInput">
+                        <input type="text" class="form-control" placeholder="State.." aria-label="State..." id="stateInput">
+                      </div>
+                      <small class="form-text text-muted">Current location will be used if not provided.</small>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="container-fluid results-container">
+        <div class="container-fluid hunter-results-container">
             <div class="row">
                 <div class="col">
                     <table class="table" id="emailsTable">
@@ -69,6 +74,14 @@
                         </thead>
                         <tbody></tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid yelp-results-container">
+            <div class="row">
+                <div class="col">
+                    <div id="businessesTable"></div>
                 </div>
             </div>
         </div>

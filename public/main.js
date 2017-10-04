@@ -1,40 +1,82 @@
 
 $(document).ready(function () {
-    yelpSearch('something');
-    // $('#searchBtn').click(function () {
-    //     var search = $('#searchInput').val();
-    //     domainSearch(search);
-    // });
+  $('#searchBtn').click(function () {
+      $('.hunter-results-container').hide();
+      $('.yelp-results-container').hide();
+      var searchType = $('.search-is-selected').data().searchType;
+      var search = $('#searchInput').val();
+      var city = $('#cityInput').val();
+      var state = $('#stateInput').val();
+      if (searchType === 'hunter') {
+        domainSearch(search);
+      } else if (searchType === 'yelp') {
+        yelpSearch(search, city, state);
+      }
+  });
+
+  $('.search-selection-button').click(function() {
+    $('.search-selection-button').removeClass('search-is-selected');
+    $(this).addClass('search-is-selected');
+
+    var searchType = $('.search-is-selected').data().searchType;
+    if (searchType === 'yelp') {
+        $('#cityStateGroup').show();
+      } else {
+        $('#cityStateGroup').hide();
+      }
+  })
 })
 
-function getYelpToken() {
-    $.ajax({
-        type: 'POST',
-        contentType: 'application/x-www-form-urlencoded',
-        url: 'https://api.yelp.com/oauth2/token?grant_type=client_credentials&client_id=WWcW2n1i-VxHNA1520GXJA&client_secret=8vM6ZF3SjcEymx2E9ul5X3PQnYvDbTZxEHqBkKeugKCGluKpqNxr414eNXnrIiNz',
-        // crossDomain: true,
-        // dataType: "jsonp"
-    });
+function yelpSearch(searchTerm, city, state)  {
+    if (city === '' || state === '') {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(handleGeolocation);
+      }
+    } else {
+      doYelpSearchCityState(searchTerm, city, state);
+    }
+    
 }
 
-function handleYelpTokenData(result) {
-    console.log(result)
+function handleGeolocation(position) {
+  var lat = position.coords.latitude;
+  var lng = position.coords.longitude;
+  var search = $('#searchInput').val();
+  doYelpSearchCoords(search, lat, lng);
 }
 
-function yelpSearch(searchTerm)  {
-    $.ajax({
-        url: 'http://localhost:8080/yelp?searchTerm=' + searchTerm,
-        success: handleHunterData,
-    });
+function doYelpSearchCoords(searchTerm, lat, lng) {
+  $.ajax({
+      url: 'http://localhost:8080/yelp?searchTerm=' + searchTerm + '&lat=' + lat + '&lng=' + lng,
+      success: handleYelpData,
+  });
+}
+
+function doYelpSearchCityState(searchTerm, city, state) {
+  $.ajax({
+      url: 'http://localhost:8080/yelp?searchTerm=' + searchTerm + '&location=' + city + ',' + state,
+      success: handleYelpData,
+  });
 }
 
 function handleYelpData(data) {
-    console.log(data);
+    var businesses = data.businesses;
+    console.log(businesses)
+    for (var business of businesses) {
+        $('#businessesTable').append('<div class="business-container"><div class="row"><div class="col">' +
+            '<img src="' + business.image_url + '" /></div><div class="col">' +
+            '<a href="' + business.url + '" target="_blank"><span class="business-name">' + business.name + '</span></a>' +
+            '<span class="business-phone">' + business.display_phone + '</span>' +
+            '<span class="business-display-address-1">' + business.location.display_address[0] + '</span>' +
+            '<span class="business-display-address-2">' + business.location.display_address[1] + '</span>' +
+            '</div></div></div>')
+    }
+    $('.yelp-results-container').show();
 }
 
 function domainSearch(businessURL) {
     $.ajax({
-        url: 'https://api.hunter.io/v2/domain-search?domain=' + businessURL + '&api_key=ae2f419b22fcf725379b54db12a63212d008c72d&limit=50',
+        url: 'http://localhost:8080/hunter?businessUrl=' + businessURL,
         success: handleHunterData,
     });
 }
@@ -67,4 +109,5 @@ function addEmailResults(contacts) {
             '</tr>')
         ind++
     }
+    $('.hunter-results-container').show();
 }
