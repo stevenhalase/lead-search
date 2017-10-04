@@ -122,6 +122,53 @@ app.get('/hunter', function(req, res) {
       });
 })
 
+app.get('/unified', function(req, res) {
+  console.log(req.query)
+  var promiseArr = [];
+
+  if (typeof req.query.businessUrl !== 'undefined') {
+    var businessUrl = req.query.businessUrl;
+  }
+
+  var hunterUrl = 'https://api.hunter.io/v2/domain-search';
+  if (typeof businessUrl !== 'undefined') {
+    hunterUrl += '?domain=' + businessUrl;
+  }
+  hunterUrl += '&api_key=ae2f419b22fcf725379b54db12a63212d008c72d&limit=50';
+  var hunterOptions = {
+      method: 'GET',
+      uri: hunterUrl
+  };
+  promiseArr.push(rp(hunterOptions));
+
+  var fullContactUrl = 'https://api.fullcontact.com/v2/company/lookup.json';
+  if (typeof businessUrl !== 'undefined') {
+    fullContactUrl += '?domain=' + businessUrl;
+  }
+  var fullContactOptions = {
+      method: 'GET',
+      uri: fullContactUrl,
+      headers: {
+        'X-FullContact-APIKey': '29ecdaae61bf307a'
+      }
+  };
+  promiseArr.push(rp(fullContactOptions));
+
+  Promise.all(promiseArr)
+    .then(function(data) {
+      console.log(data)
+      var hunterData = JSON.parse(data[0]);
+      var fullContactData = JSON.parse(data[1]);
+      var unifiedData = {};
+      for(var key in hunterData) unifiedData[key] = hunterData[key];
+      for(var key in fullContactData) unifiedData[key] = fullContactData[key];
+      res.json(unifiedData);
+    })
+    .catch(function(err) {
+      console.log(err);
+    })
+})
+
 app.listen(port, function(error){
   if(error){
     console.error('ERROR starting server!', error)
